@@ -13,6 +13,7 @@
 " Plug 'Yggdroot/indentLine'
 " Plug 'gorodinskiy/vim-coloresque'
 " Plug 'vim-scripts/DoxygenToolkit.vim'
-
+Plug 'yggdroot/indentline'
+Plug 'chiel92/vim-autoformat'
 " 卸载/禁用~/.vimrc里的默认插件
 " UnPlug 'chxuan/prepare-code'

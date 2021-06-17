@@ -1,9 +1,23 @@
-# If you come from bash you might have to change your $PATH.
+# If you come from bash you might have to change your $PATH.;
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/home/gsb/.oh-my-zsh"
-
+export ZSH="/home/rockcor/.oh-my-zsh"
+CONDA_PATH=$HOME/miniconda3
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('$CONDA_PATH/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "$CONDA_PATH/etc/profile.d/conda.sh" ]; then
+        . "$CONDA_PATH/etc/profile.d/conda.sh"
+    else
+        export PATH="$CONDA_PATH/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
@@ -11,29 +25,55 @@ export ZSH="/home/gsb/.oh-my-zsh"
 POWERLEVEL9K_MODE='nerdfont-complete'
 # ZSH_THEME="agnosterzak"
 ZSH_THEME="jbergantine"
-alias n='nautilus >/dev/null 2>&1 '
-alias v=vim
+# alias open='nautilus >/dev/null 2>&1'
+alias fuckplasma="kbuildsycoca5 && kquitapp5 plasmashell && kstart5 plasmashell </dev/null &>/dev/null &"
+alias python="/usr/bin/python3.6"
+alias svim="sudo -E vim"
+alias ussh="ssh -i ~/.ssh/id_rsa.ubuntu ubuntu@1.15.148.248 -o ServerAliveInterval=60"
 alias ll="ls -lh"
 alias num="ls|wc -l"
+alias pac="sudo pacman"
+alias syu="sudo pacman-mirrors --fasttrack 5 && sudo pacman -Syyu"
+alias pn="ps -elf|grep"
+alias vpn="export http_proxy=http://127.0.0.1:7890 && export https_proxy=http://127.0.0.1:7890" 
 alias -s c=vim
+alias -s cc=vim
 alias -s h=vim
 alias -s txt=vim
+alias -s py=vim
 fscp()
 {
     scp -r student@192.168.2.100:/wangdao/share/C++/21C1/Linux/day$1/code ~/day$1/ &&
-    scp -r student@192.168.2.100:/wangdao/share/C++/21C1/Linux/day$1/课件 ~/day$1/ &&
-    scp -r student@192.168.2.100:/wangdao/share/C++/21C1/Linux/day$1/课堂笔记 ~/day$1/ &&
-}
+        scp -r student@192.168.2.100:/wangdao/share/C++/21C1/Linux/day$1/课件 ~/day$1/ &&
+        scp -r student@192.168.2.100:/wangdao/share/C++/21C1/Linux/day$1/课堂笔记 ~/day$1/ &&
+    }
 # 以下内容去掉注释即可生效：
 # 启动错误命令自动更正
 # ENABLE_CORRECTION="true"
+sudo-command-line() {
+    [[ -z $BUFFER ]] && zle up-history
+    if [[ $BUFFER == sudo\ * ]]; then
+        LBUFFER="${LBUFFER#sudo }"
+    elif [[ $BUFFER == $EDITOR\ * ]]; then
+        LBUFFER="${LBUFFER#$EDITOR }"
+        LBUFFER="sudoedit $LBUFFER"
+    elif [[ $BUFFER == sudoedit\ * ]]; then
+        LBUFFER="${LBUFFER#sudoedit }"
+        LBUFFER="$EDITOR $LBUFFER"
+    else
+        LBUFFER="sudo $LBUFFER"
+    fi
+}
+zle -N sudo-command-line
+bindkey "\e\e" sudo-command-line
+
 
 # 在命令执行的过程中，使用小红点进行提示
 COMPLETION_WAITING_DOTS="true"
 
 # 启用已安装的插件
 plugins=(
-   autojump git extract 
+    zsh-syntax-highlighting zsh-autosuggestions autojump git extract 
 )
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -95,6 +135,7 @@ plugins=(
 # Add wisely, as too many plugins slow down shell startup.
 
 source $ZSH/oh-my-zsh.sh
+source /etc/profile.d/autojump.sh
 
 # User configuration
 
@@ -121,5 +162,4 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-source /home/gsb/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 ZSH_HIGHLIGHT_STYLES[alias]='fg=magenta,bold'
