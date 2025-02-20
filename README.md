@@ -1,2 +1,6 @@
-# my_vim_and_zsh
-perfect linux environment settings for me
+# my_vim
+I moved to AstroVim.
+# my_zsh
+No changes.
+
+
