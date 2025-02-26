@@ -1,3 +1,9 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
 # If you come from bash you might have to change your $PATH.;
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
  [[ -s /home/jshmhsb/.autojump/etc/profile.d/autojump.sh ]] && source /home/jshmhsb/.autojump/etc/profile.d/autojump.sh
@@ -64,7 +70,7 @@ esac
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
 	test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-	alias ls='ls --color=auto'
+	# alias ls='ls --color=auto'
 	#alias dir='dir --color=auto'
 	#alias vdir='vdir --color=auto'
 
@@ -101,14 +107,14 @@ export ZSH="/home/jshmhsb/.oh-my-zsh"
 CONDA_PATH="mnt/c/Users/jshmhsb/Anaconda3"
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('$CONDA_PATH/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+__conda_setup="$('/home/jshmhsb/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
-    if [ -f "$CONDA_PATH/etc/profile.d/conda.sh" ]; then
-        . "$CONDA_PATH/etc/profile.d/conda.sh"
+    if [ -f "/home/jshmhsb/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/jshmhsb/anaconda3/etc/profile.d/conda.sh"
     else
-        export PATH="$CONDA_PATH/bin:$PATH"
+        export PATH="/home/jshmhsb/anaconda3/bin:$PATH"
     fi
 fi
 unset __conda_setup
@@ -136,7 +142,7 @@ fi
 # Oh My Zsh path
 
 # Theme config
-ZSH_THEME="spaceship"
+ZSH_THEME="powerlevel10k/powerlevel10k"
 
 
 # Minimal spaceship sections for performance
@@ -153,7 +159,7 @@ SPACESHIP_PROMPT_ORDER=(
 source $ZSH/oh-my-zsh.sh
 
 # Autosuggest settings
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#663399,standout"
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=180"
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE="20"
 ZSH_AUTOSUGGEST_USE_ASYNC=1
 
@@ -211,6 +217,7 @@ alias pac="sudo pacman"
 #alias syu="sudo pacman-mirrors --fasttrack 5 && sudo pacman -Syyu"
 alias syu="sudo apt update && sudo apt upgrade"
 alias pn="ps -elf|grep"
+alias ls="exa --icons"
 # 以下内容去掉注释即可生效：
 # 启动错误命令自动更正
 # ENABLE_CORRECTION="true"
@@ -324,3 +331,34 @@ plugins=(
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+# --------------------------------------------------------------------------------
+# Custom conda-aware prompt functions
+# --------------------------------------------------------------------------------
+
+# 1) Identify which conda environment (if any) is active:
+precmd_get_conda_env_name() {
+  if [[ -n $CONDA_PREFIX ]]; then
+    if [[ $(basename "$CONDA_PREFIX") == "anaconda3" ]]; then
+      CONDA_ENV="base"
+    else
+      CONDA_ENV="$(basename "$CONDA_PREFIX")"
+    fi
+  else
+    CONDA_ENV=""
+  fi
+}
+
+# # 2) Dynamically update the ZSH prompt to include the conda environment:
+# precmd_update_prompt() {
+#   # PROMPT=$'\n'"%B%F{black}[%F{green}%D{%m/%d %H:%M}%F{black}] %F{red}%n%F{black}@%F{yellow}%m%F{black}:%F{cyan}%~"$'\n'"%F{magenta}($CONDA_ENV)%F{blue} ➜ %f%b"
+#   PROMPT=$'\n'"%B%F{cyan}%~"$'\n'"%F{magenta}($CONDA_ENV)%F{blue} ➜ %f%b"
+# }
+# #
+# # # Register them so they’re called automatically before each prompt:
+# precmd_functions+=( precmd_get_conda_env_name )
+# precmd_functions+=( precmd_update_prompt )
+
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+POWERLEVEL9K_INSTANT_PROMPT=off
